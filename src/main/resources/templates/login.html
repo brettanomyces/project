@@ -1,26 +1,47 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Project</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css"/>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 </head>
 <body>
-<form method="post" action="/login">
-    <div>
-        <label for="username">Username: </label>
-        <input id="username" type="text" name="username" >
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-one-third">
+                <h1 class="title is-1">Project</h1>
+
+                <div class="notification is-warning" th:if="${param.error != null}">Incorrect username or password</div>
+
+                <form method="post" action="/login">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control">
+                            <input class="input" id="username" type="text" name="username">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control">
+                            <input class="input" id="password" type="password" name="password">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input class="button is-primary" type="submit" value="Login">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div>
-        <label for="password">Password: </label>
-        <input id="password" type="password" name="password">
-    </div>
-    <div>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    </div>
-    <div>
-        <input type="submit" value="Login">
-    </div>
-</form>
+</section>
 </body>
 </html>
