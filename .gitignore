@@ -30,3 +30,6 @@ target/
 
 ### NPM ###
 node_modules/
+
+### Properties ###
+application.properties
