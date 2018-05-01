@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Project - Login</title>
+    <title>Project - Register</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -19,29 +19,53 @@
 
                 <div class="notification is-warning" th:if="${param.error != null}">Incorrect username or password</div>
 
-                <form method="post" action="/web/login">
+                <form method="post" action="/api/register">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
                     <div class="field">
                         <label class="label">Username</label>
                         <div class="control">
                             <input class="input" id="username" type="text" name="username">
                         </div>
                     </div>
+
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input class="input" id="email" type="text" name="email">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Confirm Email</label>
+                        <div class="control">
+                            <input class="input" id="confirmEmail" type="text" name="confirmEmail">
+                        </div>
+                    </div>
+
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control">
                             <input class="input" id="password" type="password" name="password">
                         </div>
                     </div>
+
                     <div class="field">
+                        <label class="label">Confirm Password</label>
                         <div class="control">
-                            <input class="button is-primary" type="submit" value="Login">
+                            <input class="input" id="confirmPassword" type="password" name="confirmPassword">
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="control">
-                            <a class="button is-fullwidth" href="/web/register">Create Account</a>
+                            <input class="button is-primary" type="submit" value="Register">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <a class="button" href="/web/login">Cancel</a>
                         </div>
                     </div>
                 </form>
