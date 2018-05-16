@@ -9,9 +9,9 @@
     "build-java": "mvn -D skipTests install",
     "build": "npm run -s build-js; npm run -s build-java",
 
-    "run": "mvn spring-boot:run",
+    "launch": "mvn spring-boot:run",
 
-    "watch": "npm run -s run & npm-watch"
+    "watch": "npm run -s launch & npm-watch"
   },
   "watch": {
     "build" : "src/main/js/*.js"
