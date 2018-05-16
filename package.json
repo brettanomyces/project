@@ -5,17 +5,11 @@
   "repository": "https://github.com/brettanomyces/project",
   "main": "index.js",
   "scripts": {
-    "build-js": "browserify ./src/main/js/index.js --outfile ./src/main/resources/static/js/app.js --debug",
-    "build-static": "mvn -D skipTests install",
-    "build-java": "mvn -D skipTests install",
-
-    "launch": "mvn spring-boot:run",
-    "watch": "npm run -s launch & npm-watch"
+    "build-js": "browserify ./src/main/js/index.js --outfile target/classes/static/app.js --debug",
+    "dev": "mvn spring-boot:run & npm-watch"
   },
   "watch": {
-    "build-js" : "src/main/js/*.js",
-    "build-static" : "src/main/resources/*",
-    "build-java" : "src/main/java/*"
+    "build-js": "src/main/js/*.js"
   },
   "keywords": [],
   "author": "",
