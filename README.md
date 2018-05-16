@@ -25,19 +25,20 @@ Another goal is to have a fast development cycle
 
 NPM scripts can be used to build both the mithril web app and the spring boot application. The NPM script calls maven to build the spring application.
 
-Build javascript web app
+Build javascript web app. This will bundle all the javascript for the mithril web app into a single file (src/main/resources/static/js/app.js)
 ```
 npm run -s build-js
 ```
 
-Build spring application
+Build static resources. If the application is running the resources will be hot-reloaded without restarting the application.
 ```
-npm run -s build-java
+npm run -s build-static
+
 ```
 
-Build javascript web app then spring application
+Build java class files. If the application is running spring-dev-tools will trigger an automatic restart on a classpath change.
 ```
-npm run -s build
+npm run -s build-java
 ```
 
 ### Run

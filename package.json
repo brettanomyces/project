@@ -6,15 +6,16 @@
   "main": "index.js",
   "scripts": {
     "build-js": "browserify ./src/main/js/index.js --outfile ./src/main/resources/static/js/app.js --debug",
+    "build-static": "mvn -D skipTests install",
     "build-java": "mvn -D skipTests install",
-    "build": "npm run -s build-js; npm run -s build-java",
 
     "launch": "mvn spring-boot:run",
-
     "watch": "npm run -s launch & npm-watch"
   },
   "watch": {
-    "build" : "src/main/js/*.js"
+    "build-js" : "src/main/js/*.js",
+    "build-static" : "src/main/resources/*",
+    "build-java" : "src/main/java/*"
   },
   "keywords": [],
   "author": "",
