@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.Collections;
 
@@ -19,13 +20,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     // HQL uses the class name rather than the table name
     Query query = entityManager.createQuery("from User u where u.username = :username");
-    User user = (User) query.setParameter("username", username).getSingleResult();
-
-    if (user == null) {
+    try {
+      User user = (User) query.setParameter("username", username).getSingleResult();
+      return new org.springframework.security.core.userdetails.User(
+          user.getUsername(),
+          user.getPassword(),
+          Collections.emptyList()
+      );
+    } catch (NoResultException ex) {
       throw new UsernameNotFoundException("Invalid username or password!");
     }
-
-    return new org.springframework.security.core.userdetails.User(user.getId(), user.getPassword(), Collections.emptyList());
   }
-
 }
