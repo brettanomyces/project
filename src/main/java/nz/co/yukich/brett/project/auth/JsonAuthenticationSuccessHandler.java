@@ -14,9 +14,6 @@ import java.io.IOException;
 public class JsonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
     response.setStatus(HttpStatus.OK.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write("{\"status\": \"200\", \"message\": \"Success\"}");
