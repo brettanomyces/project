@@ -1,67 +1,85 @@
 package nz.co.yukich.brett.project;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nz.co.yukich.brett.project.auth.JsonAuthenticationFailureHandler;
 import nz.co.yukich.brett.project.auth.JsonAuthenticationProcessingFilter;
 import nz.co.yukich.brett.project.auth.JsonAuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import nz.co.yukich.brett.project.auth.JsonLogoutSuccessHandler;
+import nz.co.yukich.brett.project.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.*;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private static final String APP_ENDPOINT = "/app";
+  private static final String API_LOGIN_ENDPOINT = "/auth/login";
+  private static final String API_LOGOUT_ENDPOINT = "/auth/logout";
 
-  private static final String API_LOGIN_ENDPOINT = "/api/login";
-  private static final String API_LOGOUT_ENDPOINT = "/api/logout";
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper();
+  }
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+  @Bean
+  public UserDetailsService userDetailsService() {
+    return new UserDetailsServiceImpl();
+  }
+
+  @Bean
+  public AuthenticationSuccessHandler successHandler() {
+    return new JsonAuthenticationSuccessHandler();
+  }
+
+  @Bean
+  public AuthenticationFailureHandler failureHandler() {
+    return new JsonAuthenticationFailureHandler();
+  }
+
+  @Bean
+  public LogoutSuccessHandler logoutSuccessHandler() {
+    return new JsonLogoutSuccessHandler();
+  }
 
   @Bean
   public AbstractAuthenticationProcessingFilter authenticationFilter() throws Exception {
-    JsonAuthenticationProcessingFilter filter = new JsonAuthenticationProcessingFilter();
+    JsonAuthenticationProcessingFilter filter = new JsonAuthenticationProcessingFilter(objectMapper());
     filter.setFilterProcessesUrl(API_LOGIN_ENDPOINT);
-    filter.setAuthenticationSuccessHandler(new JsonAuthenticationSuccessHandler());
-    filter.setAuthenticationFailureHandler(new JsonAuthenticationFailureHandler());
+    filter.setAuthenticationSuccessHandler(successHandler());
+    filter.setAuthenticationFailureHandler(failureHandler());
     filter.setAuthenticationManager(authenticationManagerBean());
     return filter;
-  }
-
-  @Autowired
-  public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
   }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
-    http.authorizeRequests()
-        .antMatchers(HttpMethod.GET, APP_ENDPOINT).permitAll()
-        .antMatchers(HttpMethod.POST, API_LOGIN_ENDPOINT).permitAll()
-        .antMatchers(HttpMethod.GET, "/js/*.js").permitAll()
-        .antMatchers(HttpMethod.GET, "/css/*.css").permitAll()
+    http
+        .csrf().disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+        .and().authorizeRequests()
+        .antMatchers(HttpMethod.POST, "/auth/*").permitAll()
+        .antMatchers("/", "/js/*.js", "/css/*.css").permitAll()
+        .antMatchers("/api/**").authenticated()
         .anyRequest().authenticated()
-        .and()
-        .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-        .logout()
-        .logoutUrl(API_LOGOUT_ENDPOINT)
-        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-        .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/app"));
+        .and().addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+        .logout().logoutUrl(API_LOGOUT_ENDPOINT).logoutSuccessHandler(logoutSuccessHandler());
+
   }
 }

@@ -1,10 +1,8 @@
 const m = require("mithril");
-const Csrf = require("./Csrf");
 
 const Auth = {
   username: "",
   password: "",
-  authenticated: false,
 
   setUsername: function (value) {
     Auth.username = value
@@ -18,17 +16,13 @@ const Auth = {
   login: function () {
     m.request({
       method: "POST",
-      url: "/api/login",
-      headers: {
-        [Csrf.header]: Csrf.token
-      },
+      url: "/auth/login",
       data: {
         "username": Auth.username,
         "password": Auth.password,
       }
     })
       .then(function(result) {
-        Auth.authenticated = true;
         m.route.set("home")
       })
       .catch(function (e) {
@@ -38,13 +32,9 @@ const Auth = {
   logout: function () {
     m.request({
       method: "POST",
-      url: "/api/logout",
-      headers: {
-        [Csrf.header] : Csrf.token
-      }
+      url: "/auth/logout",
     })
-      .then(function() {
-        Auth.authenticated = false;
+      .finally(function() {
         m.route.set("/login");
       })
   }
