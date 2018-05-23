@@ -23,7 +23,12 @@ module.exports = {
                         "Username"
                       ),
                       m(".control",
-                        m("input.input[type='text']", {oninput: m.withAttr("value", Auth.setUsername), value: Auth.username})
+                        m("input.input[type='text']", {
+                          value: Auth.username,
+                          class: Auth.validateUsername && !Auth.isUsernameValid() ? "is-danger" : "",
+                          oninput: m.withAttr("value", Auth.setUsername),
+                          onfocusout: function () { Auth.setValidateUsername(true) }
+                        })
                       )
                     ]
                   ),
@@ -33,7 +38,12 @@ module.exports = {
                         "Password"
                       ),
                       m(".control",
-                        m("input.input[type='password']", {oninput: m.withAttr("value", Auth.setPassword), value: Auth.password})
+                        m("input.input[type='password']", {
+                          value: Auth.password,
+                          class: Auth.validatePassword && !Auth.isPasswordValid() ? "is-danger" : "",
+                          oninput: m.withAttr("value", Auth.setPassword),
+                          onfocusout: function () { Auth.setValidatePassword(true) },
+                        })
                       )
                     ]
                   ),

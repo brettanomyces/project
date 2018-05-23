@@ -2,17 +2,34 @@ const m = require("mithril");
 
 const Auth = {
   username: "",
+  validateUsername: false,
   password: "",
+  validatePassword: false,
 
   setUsername: function (value) {
     Auth.username = value
   },
+
+  setValidateUsername: function(validate) {
+    Auth.validateUsername = validate
+  },
+
+  isUsernameValid: function() {
+    return Auth.username !== ""
+  },
+
   setPassword: function (value) {
     Auth.password = value
   },
-  canSubmit: function () {
-    return Auth.username !== "" && Auth.password !== ""
+
+  setValidatePassword: function(validate) {
+    Auth.validatePassword = validate
   },
+
+  isPasswordValid: function() {
+    return Auth.password !== ""
+  },
+
   login: function () {
     m.request({
       method: "POST",
@@ -29,6 +46,7 @@ const Auth = {
         console.error("catch");
       })
   },
+
   logout: function () {
     m.request({
       method: "POST",
