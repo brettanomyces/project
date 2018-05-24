@@ -1,22 +1,21 @@
 package nz.co.yukich.brett.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nz.co.yukich.brett.project.auth.JsonAuthenticationFailureHandler;
-import nz.co.yukich.brett.project.auth.JsonAuthenticationProcessingFilter;
-import nz.co.yukich.brett.project.auth.JsonAuthenticationSuccessHandler;
-import nz.co.yukich.brett.project.auth.JsonLogoutSuccessHandler;
+import nz.co.yukich.brett.project.auth.*;
 import nz.co.yukich.brett.project.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.*;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
@@ -43,17 +42,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public AuthenticationSuccessHandler successHandler() {
-    return new JsonAuthenticationSuccessHandler();
+    return new JsonAuthenticationSuccessHandler(objectMapper());
   }
 
   @Bean
   public AuthenticationFailureHandler failureHandler() {
-    return new JsonAuthenticationFailureHandler();
+    return new JsonAuthenticationFailureHandler(objectMapper());
+  }
+
+  @Bean
+  JsonAuthenticationEntryPoint authenticationEntryPoint() {
+    return new JsonAuthenticationEntryPoint(objectMapper());
   }
 
   @Bean
   public LogoutSuccessHandler logoutSuccessHandler() {
-    return new JsonLogoutSuccessHandler();
+    return new JsonLogoutSuccessHandler(objectMapper());
   }
 
   @Bean
@@ -72,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .csrf().disable()
         .exceptionHandling()
-        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+        .authenticationEntryPoint(authenticationEntryPoint())
         .and().authorizeRequests()
         .antMatchers(HttpMethod.POST, "/auth/*").permitAll()
         .antMatchers("/", "/js/*.js", "/css/*.css").permitAll()
