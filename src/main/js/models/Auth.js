@@ -5,6 +5,15 @@ const Auth = {
   validateUsername: false,
   password: "",
   validatePassword: false,
+  message: "",
+
+  reset: function() {
+    Auth.username = "";
+    Auth.validateUsername = false;
+    Auth.password = "";
+    Auth.validatePassword = false;
+    Auth.message = "";
+  },
 
   setUsername: function (value) {
     Auth.username = value
@@ -30,6 +39,10 @@ const Auth = {
     return Auth.password !== ""
   },
 
+  canSubmit: function() {
+    return Auth.isUsernameValid() && Auth.isPasswordValid()
+  },
+
   login: function () {
     m.request({
       method: "POST",
@@ -39,11 +52,13 @@ const Auth = {
         "password": Auth.password,
       }
     })
-      .then(function(result) {
+      .then(function() {
+        Auth.reset();
         m.route.set("home")
       })
       .catch(function (e) {
-        console.error("catch");
+        Auth.password = "";
+        Auth.message = e.message;
       })
   },
 

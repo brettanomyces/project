@@ -16,6 +16,6 @@ public class JsonAuthenticationFailureHandler implements AuthenticationFailureHa
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
     response.setStatus(HttpStatus.BAD_REQUEST.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.getWriter().write("{\"status\": \"400\", \"message\": " + exception.getMessage() + "}");
+    response.getWriter().write("{\"status\": \"400\", \"message\": \"" + exception.getMessage() + "\"}");
   }
 }

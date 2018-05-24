@@ -11,6 +11,7 @@ module.exports = {
               m("h1.title.is-1",
                 "Project"
               ),
+              Auth.message !== "" ? m(".notification.is-warning", Auth.message) : null,
               m("form", {
                 onsubmit: function (e) {
                   e.preventDefault();
@@ -49,7 +50,10 @@ module.exports = {
                   ),
                   m(".field",
                     m(".control",
-                      m("button.button.is-primary[type='submit']", "Login")
+                      m("button.button.is-primary[type='submit']",
+                        {
+                          disabled: !Auth.canSubmit()
+                        }, "Login")
                     )
                   )
                 ]
