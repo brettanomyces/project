@@ -1,8 +1,8 @@
-package nz.co.yukich.brett.project.auth.model;
+package nz.co.yukich.brett.project.model;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class RegisterRequest {
 
   @NotBlank
   private String username;

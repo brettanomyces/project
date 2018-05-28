@@ -1,7 +1,7 @@
-package nz.co.yukich.brett.project.auth;
+package nz.co.yukich.brett.project.framework;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nz.co.yukich.brett.project.auth.model.BaseResponse;
+import nz.co.yukich.brett.project.model.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JsonAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
 
   private ObjectMapper objectMapper;
 
-  public JsonAuthenticationFailureHandler(@Autowired ObjectMapper objectMapper) {
+  public AuthenticationFailureHandlerImpl(@Autowired ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 

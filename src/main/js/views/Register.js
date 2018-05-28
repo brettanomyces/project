@@ -10,12 +10,22 @@ let state = {
   validateConfirmPassword: false,
   message: "",
 
+  reset: function () {
+    state.username = "";
+    state.validateUsername = false;
+    state.password = "";
+    state.validatePassword = false;
+    state.confirmPassword = "";
+    state.validateConfirmPassword = "";
+    state.message = "";
+  },
+
   isUsernameValid: function () {
-    return state.username.length > 5;
+    return state.username.length > 4;
   },
 
   isPasswordValid: function () {
-    return state.password.length > 8;
+    return state.password.length > 4;
   },
 
   isConfirmPasswordValid: function () {
@@ -41,11 +51,14 @@ module.exports = {
               m("form", {
                   onsubmit: function (event) {
                     event.preventDefault();
-                    Auth.login(state.username, state.password).then(function () {
+                    Auth.register(state.username, state.password).then(function () {
+                      return Auth.login(state.username, state.password);
+                    }).then(function () {
                       state.reset();
                       m.route.set("/home");
                     }).catch(function (error) {
                       state.password = "";
+                      state.confirmPassword = "";
                       state.message = error.message;
                     })
                   }

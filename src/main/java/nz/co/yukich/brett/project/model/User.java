@@ -10,10 +10,11 @@ import javax.validation.constraints.NotBlank;
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @JsonIgnore
-  private final String id;
+  private final Integer id;
 
+  @Column(unique = true)
   @NotBlank
   private final String username;
 
@@ -21,24 +22,19 @@ public class User {
   @JsonIgnore
   private final String password;
 
-  @NotBlank
-  private final String email;
-
   public User() {
     this.id = null;
     this.username = null;
     this.password = null;
-    this.email = null;
   }
 
-  public User(String username, String password, String email) {
+  public User(String username, String password) {
     this.id = null;
     this.username = username;
     this.password = password;
-    this.email = email;
   }
 
-  public String getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -48,9 +44,5 @@ public class User {
 
   public String getPassword() {
     return password;
-  }
-
-  public String getEmail() {
-    return email;
   }
 }

@@ -1,7 +1,7 @@
-package nz.co.yukich.brett.project.auth;
+package nz.co.yukich.brett.project.framework;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nz.co.yukich.brett.project.auth.model.LoginRequest;
+import nz.co.yukich.brett.project.model.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JsonAuthenticationProcessingFilter extends UsernamePasswordAuthenticationFilter {
+public class AuthenticationProcessingFilterImpl extends UsernamePasswordAuthenticationFilter {
 
   private ObjectMapper objectMapper;
 
-  public JsonAuthenticationProcessingFilter(@Autowired ObjectMapper objectMapper) {
+  public AuthenticationProcessingFilterImpl(@Autowired ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 

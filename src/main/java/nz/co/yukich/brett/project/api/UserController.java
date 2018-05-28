@@ -1,60 +1,47 @@
 package nz.co.yukich.brett.project.api;
 
-import nz.co.yukich.brett.project.model.Registration;
+import nz.co.yukich.brett.project.WebSecurityConfig;
+import nz.co.yukich.brett.project.model.RegisterRequest;
 import nz.co.yukich.brett.project.model.User;
+import nz.co.yukich.brett.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 @RestController
-@Transactional
 public class UserController {
 
-  @Autowired
-  PasswordEncoder encoder;
+  private UserService userService;
 
-  @Autowired
-  EntityManager entityManager;
+  public UserController(@Autowired UserService userService) {
+    this.userService = userService;
+  }
 
-  @RequestMapping(method = RequestMethod.POST, value = "/api/user")
-  public ResponseEntity register(@Valid Registration registration) {
-    if (!registration.getPassword().equals(registration.getConfirmPassword())) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  @RequestMapping(
+      method = RequestMethod.POST,
+      value = WebSecurityConfig.API_REGISTER_ENDPOINT
+  )
+  public User register(@Valid @RequestBody RegisterRequest registration) throws BadRequestException {
+    try {
+      return userService.createUser(registration.getUsername(), registration.getPassword());
+    } catch (ConstraintViolationException ex) {
+      throw new BadRequestException("Username is not available");
     }
-
-    if (!registration.getEmail().equals(registration.getConfirmEmail())) {
-      return new ResponseEntity(HttpStatus.BAD_REQUEST);
-    }
-
-    String encodedPassword = encoder.encode(registration.getPassword());
-
-    User user = new User(registration.getUsername(), encodedPassword, registration.getEmail());
-    user = entityManager.merge(user);
-
-    return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/api/user/current")
+  @ResponseBody
   public User retrieveUser(Authentication authentication) throws NotFoundException {
     org.springframework.security.core.userdetails.User securityUser = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+    User user = userService.retrieveUser(securityUser.getUsername());
 
-    Query query = entityManager.createQuery("from User u where u.username = :username");
-    try {
-      return (User) query.setParameter("username", securityUser.getUsername()).getSingleResult();
-    } catch (NoResultException e) {
-      // this is an authorized endpoint so something has gone wrong if there is no current user!
+    if (user == null) {
       throw new NotFoundException();
     }
+
+    return user;
   }
 }

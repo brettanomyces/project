@@ -1,10 +1,13 @@
-package nz.co.yukich.brett.project.auth.model;
+package nz.co.yukich.brett.project.model;
 
 public class BaseResponse {
 
   private Integer status;
 
   private String message;
+
+  public BaseResponse() {
+  }
 
   public BaseResponse(Integer status, String message) {
     this.status = status;

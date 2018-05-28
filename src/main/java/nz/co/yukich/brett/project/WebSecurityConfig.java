@@ -1,8 +1,7 @@
 package nz.co.yukich.brett.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nz.co.yukich.brett.project.auth.*;
-import nz.co.yukich.brett.project.service.UserDetailsServiceImpl;
+import nz.co.yukich.brett.project.framework.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,8 +21,9 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private static final String API_LOGIN_ENDPOINT = "/auth/login";
-  private static final String API_LOGOUT_ENDPOINT = "/auth/logout";
+  public static final String API_LOGIN_ENDPOINT = "/auth/login";
+  public static final String API_LOGOUT_ENDPOINT = "/auth/logout";
+  public static final String API_REGISTER_ENDPOINT = "/auth/register";
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -42,27 +42,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public AuthenticationSuccessHandler successHandler() {
-    return new JsonAuthenticationSuccessHandler(objectMapper());
+    return new AuthenticationSuccessHandlerImpl(objectMapper());
   }
 
   @Bean
   public AuthenticationFailureHandler failureHandler() {
-    return new JsonAuthenticationFailureHandler(objectMapper());
+    return new AuthenticationFailureHandlerImpl(objectMapper());
   }
 
   @Bean
-  JsonAuthenticationEntryPoint authenticationEntryPoint() {
-    return new JsonAuthenticationEntryPoint(objectMapper());
+  AuthenticationEntryPointImpl authenticationEntryPoint() {
+    return new AuthenticationEntryPointImpl(objectMapper());
   }
 
   @Bean
   public LogoutSuccessHandler logoutSuccessHandler() {
-    return new JsonLogoutSuccessHandler(objectMapper());
+    return new LogoutSuccessHandlerImpl(objectMapper());
   }
 
   @Bean
   public AbstractAuthenticationProcessingFilter authenticationFilter() throws Exception {
-    JsonAuthenticationProcessingFilter filter = new JsonAuthenticationProcessingFilter(objectMapper());
+    AuthenticationProcessingFilterImpl filter = new AuthenticationProcessingFilterImpl(objectMapper());
     filter.setFilterProcessesUrl(API_LOGIN_ENDPOINT);
     filter.setAuthenticationSuccessHandler(successHandler());
     filter.setAuthenticationFailureHandler(failureHandler());

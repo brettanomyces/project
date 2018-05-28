@@ -16,10 +16,20 @@ const Auth = {
     m.request({
       method: "POST",
       url: "/auth/logout",
+    }).finally(function() {
+      m.route.set("/login");
     })
-      .finally(function() {
-        m.route.set("/login");
-      })
+  },
+
+  register: function (username, password) {
+    return m.request({
+      method: "POST",
+      url: "/auth/register",
+      data: {
+        "username": username,
+        "password": password
+      }
+    })
   }
 };
 
