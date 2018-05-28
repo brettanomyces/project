@@ -6,43 +6,25 @@ let state = {
   validateUsername: false,
   password: "",
   validatePassword: false,
+  confirmPassword: "",
+  validateConfirmPassword: false,
   message: "",
 
-  reset: function () {
-    state.username = "";
-    state.validateUsername = false;
-    state.password = "";
-    state.validatePassword = false;
-    state.message = "";
-  },
-
-  setUsername: function (value) {
-    state.username = value
-  },
-
-  setValidateUsername: function (validate) {
-    state.validateUsername = validate
-  },
-
   isUsernameValid: function () {
-    return state.username !== ""
-  },
-
-  setPassword: function (value) {
-    state.password = value
-  },
-
-  setValidatePassword: function (validate) {
-    state.validatePassword = validate
+    return state.username.length > 5;
   },
 
   isPasswordValid: function () {
-    return state.password !== ""
+    return state.password.length > 8;
+  },
+
+  isConfirmPasswordValid: function () {
+    return state.isPasswordValid() && state.password === state.confirmPassword;
   },
 
   canSubmit: function () {
-    return state.isUsernameValid() && state.isPasswordValid()
-  },
+    return state.isUsernameValid() && state.isPasswordValid() && state.isConfirmPasswordValid();
+  }
 };
 
 module.exports = {
@@ -77,9 +59,11 @@ module.exports = {
                         m("input.input[type='text']", {
                           value: state.username,
                           class: state.validateUsername && !state.isUsernameValid() ? "is-danger" : "",
-                          oninput: m.withAttr("value", state.setUsername),
+                          oninput: m.withAttr("value", function (username) {
+                            state.username = username;
+                          }),
                           onfocusout: function () {
-                            state.setValidateUsername(true)
+                            state.validateUsername = true
                           }
                         })
                       )
@@ -94,9 +78,30 @@ module.exports = {
                         m("input.input[type='password']", {
                           value: state.password,
                           class: state.validatePassword && !state.isPasswordValid() ? "is-danger" : "",
-                          oninput: m.withAttr("value", state.setPassword),
+                          oninput: m.withAttr("value", function (password) {
+                            state.password = password;
+                          }),
                           onfocusout: function () {
-                            state.setValidatePassword(true)
+                            state.validatePassword = true;
+                          },
+                        })
+                      )
+                    ]
+                  ),
+                  m(".field",
+                    [
+                      m("label.label",
+                        "Confirm password"
+                      ),
+                      m(".control",
+                        m("input.input[type='password']", {
+                          value: state.confirmPassword,
+                          class: state.validateConfirmPassword && !state.isConfirmPasswordValid() ? "is-danger" : "",
+                          oninput: m.withAttr("value", function (confirmPassword) {
+                            state.confirmPassword = confirmPassword;
+                          }),
+                          onfocusout: function () {
+                            state.validateConfirmPassword = true;
                           },
                         })
                       )
@@ -107,7 +112,8 @@ module.exports = {
                       m("button.button.is-primary[type='submit']",
                         {
                           disabled: !state.canSubmit()
-                        }, "Login")
+                        }, "Register"
+                      )
                     )
                   ),
                   m(".field",
@@ -115,9 +121,9 @@ module.exports = {
                       m("button.button[type='button']",
                         {
                           onclick: function () {
-                            m.route.set("/register")
+                            m.route.set("/login")
                           }
-                        }, "Register"
+                        }, "Cancel"
                       )
                     )
                   )

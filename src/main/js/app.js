@@ -1,12 +1,10 @@
 const m = require("mithril");
 const Login = require("./views/Login");
+const Register = require("./views/Register");
 const Home = require("./views/Home");
 
 m.route(document.body, "/home", {
-    "/home": {
-        onmatch: function() {
-                return Home;
-        }
-    },
-    "/login": Login
+  "/home": Home,
+  "/register": Register,
+  "/login": Login
 });
