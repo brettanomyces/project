@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class ProjectApplication {
 
-  public static final String ENVIROMENT_DEV = "dev";
-
   public static void main(String[] args) {
     SpringApplication.run(ProjectApplication.class, args);
   }
