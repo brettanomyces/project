@@ -11,33 +11,37 @@ let state = {
   message: "",
 
   reset: function () {
-    state.username = "";
-    state.validateUsername = false;
-    state.password = "";
-    state.validatePassword = false;
-    state.confirmPassword = "";
-    state.validateConfirmPassword = "";
-    state.message = "";
+    this.username = "";
+    this.validateUsername = false;
+    this.password = "";
+    this.validatePassword = false;
+    this.confirmPassword = "";
+    this.validateConfirmPassword = "";
+    this.message = "";
   },
 
   isUsernameValid: function () {
-    return state.username.length > 4;
+    return this.username.length > 4;
   },
 
   isPasswordValid: function () {
-    return state.password.length > 4;
+    return this.password.length > 4;
   },
 
   isConfirmPasswordValid: function () {
-    return state.isPasswordValid() && state.password === state.confirmPassword;
+    return this.isPasswordValid() && this.password === this.confirmPassword;
   },
 
   canSubmit: function () {
-    return state.isUsernameValid() && state.isPasswordValid() && state.isConfirmPasswordValid();
+    return this.isUsernameValid() && this.isPasswordValid() && this.isConfirmPasswordValid();
   }
 };
 
 module.exports = {
+  onremove: function () {
+    state.reset();
+  },
+
   view: function () {
     return m("section.section",
       m(".container",
@@ -54,7 +58,6 @@ module.exports = {
                     Auth.register(state.username, state.password).then(function () {
                       return Auth.login(state.username, state.password);
                     }).then(function () {
-                      state.reset();
                       m.route.set("/home");
                     }).catch(function (error) {
                       state.password = "";

@@ -1,5 +1,7 @@
-package nz.co.yukich.brett.project;
+package nz.co.yukich.brett.project.api;
 
+import nz.co.yukich.brett.project.model.BaseResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -12,10 +14,15 @@ public class DummyController {
 
   @RequestMapping("/api/dummy")
   @ResponseBody
-  public Dummy dummy(Authentication authentication)
+  public BaseResponse dummy(Authentication authentication)
   {
     User user = (User) authentication.getPrincipal();
-    return new Dummy(user.getUsername());
+    return new BaseResponse(
+        HttpStatus.OK.value(),
+        HttpStatus.OK.getReasonPhrase(),
+        new Dummy(user.getUsername())
+    );
+
   }
 
   private class Dummy {

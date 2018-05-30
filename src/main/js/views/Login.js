@@ -46,6 +46,10 @@ let state = {
 };
 
 module.exports = {
+  onremove: function() {
+    state.reset();
+  },
+
   view: function () {
     return m("section.section",
       m(".container",
@@ -60,7 +64,6 @@ module.exports = {
                   onsubmit: function (event) {
                     event.preventDefault();
                     Auth.login(state.username, state.password).then(function () {
-                      state.reset();
                       m.route.set("/home");
                     }).catch(function (error) {
                       state.password = "";

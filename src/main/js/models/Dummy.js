@@ -2,11 +2,9 @@ const m = require("mithril");
 
 const Dummy = {
   dummy: function () {
-    m.request({
+    return m.request({
       method: "GET",
       url: "/api/dummy",
-    }).then(function (result) {
-      console.log(result)
     })
   }
 };
