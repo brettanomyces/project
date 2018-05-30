@@ -2,6 +2,8 @@ package nz.co.yukich.brett.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nz.co.yukich.brett.project.framework.*;
+import nz.co.yukich.brett.project.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -80,7 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and().authorizeRequests()
         .antMatchers(HttpMethod.POST, "/auth/*").permitAll()
         .antMatchers("/", "/js/*.js", "/css/*.css").permitAll()
-        .antMatchers("/api/**").authenticated()
         .anyRequest().authenticated()
         .and().addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .logout().logoutUrl(API_LOGOUT_ENDPOINT).logoutSuccessHandler(logoutSuccessHandler());
