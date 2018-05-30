@@ -1,6 +1,8 @@
 const m = require("mithril");
 
 const Auth = {
+  authenticated: false,
+
   login: function (username, password) {
     return m.request({
       method: "POST",
@@ -9,6 +11,8 @@ const Auth = {
         "username": username,
         "password": password
       }
+    }).then(function () {
+      Auth.authenticated = true;
     })
   },
 
@@ -16,6 +20,8 @@ const Auth = {
     m.request({
       method: "POST",
       url: "/auth/logout",
+    }).then(function () {
+      Auth.authenticated = false;
     }).finally(function() {
       m.route.set("/login");
     })
