@@ -51,7 +51,7 @@ module.exports = {
               m("h1.title.is-1",
                 "Project"
               ),
-              state.message !== "" ? m(".notification.is-warning", state.message) : null,
+              state.message !== "" ? m("pre.notification.is-warning", state.message) : null,
               m("form", {
                   onsubmit: function (event) {
                     event.preventDefault();
