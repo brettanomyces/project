@@ -12,13 +12,21 @@ I choose to implement a financial tool because it is something that will be usef
 * Maven
 * Thymeleaf
 * NPM
+  * npm-watch
+  * browserify
 * MithrilJS
 
 ### Dev Journal
 
-One goal of this project is to be able to re-implement parts of it
+Goals: 
+* module parts so that I can rewrite some things in a different language if/when I desire. 
+* fast development cycle
+  * spring-boot-devtools handles rebuilding and reloading the java application
+  * npm-watch handles rebuilding the web app
+* use latest releases of technologies
 
-Another goal is to have a fast development cycle
+Thoughts:
+* Use yoda conditions (e.g. constant.equals(values) instead of value.equals(constant)) everywhere. In places where value may be null this prevents a null pointer exception and elsewhere it maintains consistency.
 
 
 ### Build
