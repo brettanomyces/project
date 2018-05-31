@@ -27,13 +27,14 @@ const Auth = {
     })
   },
 
-  register: function (username, password) {
+  register: function (username, password, email) {
     return m.request({
       method: "POST",
       url: "/auth/register",
       data: {
         "username": username,
-        "password": password
+        "password": password,
+        "email" : email,
       }
     })
   }

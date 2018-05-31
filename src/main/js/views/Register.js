@@ -8,6 +8,8 @@ let state = {
   validatePassword: false,
   confirmPassword: "",
   validateConfirmPassword: false,
+  email: "",
+  validateEmail: false,
   message: "",
 
   reset: function () {
@@ -17,6 +19,8 @@ let state = {
     this.validatePassword = false;
     this.confirmPassword = "";
     this.validateConfirmPassword = "";
+    this.email = "";
+    this.validateEmail = false;
     this.message = "";
   },
 
@@ -30,6 +34,10 @@ let state = {
 
   isConfirmPasswordValid: function () {
     return this.isPasswordValid() && this.password === this.confirmPassword;
+  },
+
+  isEmailValid: function () {
+    return /\S+@\S+/.test(this.email);
   },
 
   canSubmit: function () {
@@ -55,7 +63,7 @@ module.exports = {
               m("form", {
                   onsubmit: function (event) {
                     event.preventDefault();
-                    Auth.register(state.username, state.password).then(function () {
+                    Auth.register(state.username, state.password, state.email).then(function () {
                       return Auth.login(state.username, state.password);
                     }).then(function () {
                       m.route.set("/home");
@@ -118,6 +126,25 @@ module.exports = {
                           }),
                           onfocusout: function () {
                             state.validateConfirmPassword = true;
+                          },
+                        })
+                      )
+                    ]
+                  ),
+                  m(".field",
+                    [
+                      m("label.label",
+                        "Email"
+                      ),
+                      m(".control",
+                        m("input.input[type='email']", {
+                          value: state.email,
+                          class: state.validateEmail && !state.isEmailValid() ? "is-danger" : "",
+                          oninput: m.withAttr("value", function (email) {
+                            state.email = email;
+                          }),
+                          onfocusout: function () {
+                            state.validateEmail = true;
                           },
                         })
                       )
