@@ -36,7 +36,7 @@ public class RegisterRequestTest {
 
     Set<ConstraintViolation<RegisterRequest>> violations = validator.validate(request);
     assertEquals(1, violations.size());
-    assertEquals(RegisterRequest.INVALID_USERNAME_SIZE_MESSAGE, violations.iterator().next().getMessageTemplate());
+    assertEquals("{register.username.size}", violations.iterator().next().getMessageTemplate());
   }
 
   @Test
@@ -55,7 +55,7 @@ public class RegisterRequestTest {
     request.setEmail("dummy+example.com");
     Set<ConstraintViolation<RegisterRequest>> violations = validator.validate(request);
     assertEquals(1, violations.size());
-    assertEquals(RegisterRequest.INVALID_EMAIL_MESSAGE, violations.iterator().next().getMessage());
+    assertEquals("{register.email}", violations.iterator().next().getMessageTemplate());
   }
 
   private RegisterRequest validRequest() {

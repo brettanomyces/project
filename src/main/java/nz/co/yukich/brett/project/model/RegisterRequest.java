@@ -6,20 +6,16 @@ import javax.validation.constraints.Size;
 
 public class RegisterRequest {
 
-  public static final String INVALID_USERNAME_SIZE_MESSAGE = "Username must be at least {min} characters";
-  public static final String INVALID_PASSWORD_SIZE_MESSAGE = "Password must be at least {min} characters";
-  public static final String INVALID_EMAIL_MESSAGE = "Email is not valid";
-
   @NotNull
-  @Size(min = 4, message = INVALID_USERNAME_SIZE_MESSAGE)
+  @Size(min = 4, message = "{register.username.size}")
   private String username;
 
   @NotNull
-  @Size(min = 8, message = INVALID_PASSWORD_SIZE_MESSAGE)
+  @Size(min = 8, message = "{register.password.size}")
   private String password;
 
   @NotNull
-  @Email(message = INVALID_EMAIL_MESSAGE)
+  @Email(message = "{register.email}")
   private String email;
 
   public String getUsername() {
