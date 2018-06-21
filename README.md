@@ -25,10 +25,15 @@ Goals:
   * npm-watch handles rebuilding the web app
 * use latest releases of technologies
 
-Thoughts:
+Thoughts on programming:
 * Use yoda conditions (e.g. constant.equals(values) instead of value.equals(constant)) everywhere. In places where value may be null this prevents a null pointer exception and elsewhere it maintains consistency.
 * Validation layer should only use information provided in the object being validated, i.e. don' check the state of the application or DB (e.g. don't check if username is already taken in validation layer)
 * Need a better way of defining/validating form data on frontend.
+* Database changes should not break existing code. Existing code should run without issue against new and old versions of the code
+* * https://news.ycombinator.com/item?id=17247088
+
+Thoughts on accounting:
+I should probably integrate with some existing tool, or at least get an understanding of them in order to improve my design accounting http://hledger.org/
 
 
 ### Build
