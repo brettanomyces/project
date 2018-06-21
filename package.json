@@ -5,9 +5,9 @@
   "repository": "https://github.com/brettanomyces/project",
   "main": "index.js",
   "scripts": {
-    "build-dev": "browserify ./src/main/js/app.js --outfile target/classes/static/js/app.js --debug",
+    "build-dev": "./cert.localhost.sh; browserify ./src/main/js/app.js --outfile target/classes/static/js/app.js --debug",
     "build-release": "browserify ./src/main/js/app.js --outfile target/classes/static/js/app.js",
-    "dev": "(npm-watch & mvn spring-boot:run)",
+    "dev": "(npm run build-dev; npm-watch | mvn spring-boot:run)",
     "release": "npm run build-release; mvn package"
   },
   "watch": {
