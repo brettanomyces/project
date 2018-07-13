@@ -1,7 +1,6 @@
 package project.websecurity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import project.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import project.user.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +28,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     return new UserDetailsServiceImpl(userService);
   }
 
-  public AbstractAuthenticationProcessingFilter authenticationFilter() throws Exception {
+  private AbstractAuthenticationProcessingFilter authenticationFilter() throws Exception {
     AuthenticationProcessingFilterImpl filter = new AuthenticationProcessingFilterImpl(objectMapper);
     filter.setFilterProcessesUrl("/auth/login");
     filter.setAuthenticationSuccessHandler(new AuthenticationSuccessHandlerImpl(objectMapper));
