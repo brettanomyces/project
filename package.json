@@ -5,10 +5,11 @@
   "repository": "https://github.com/brettanomyces/project",
   "main": "index.js",
   "scripts": {
-    "build-dev": "./ssl.sh; browserify ./src/main/js/app.js --outfile target/classes/static/js/app.js --debug",
-    "build-release": "browserify ./src/main/js/app.js --outfile target/classes/static/js/app.js",
-    "dev": "(npm run build-dev; npm-watch | mvn spring-boot:run)",
-    "release": "npm run build-release; mvn package"
+    "//": "src/main/resources/static/js/",
+    "build-dev": "./ssl.sh; browserify ./src/main/js/app.js --outfile src/main/resources/static/js/app.js --debug",
+    "build-release": "browserify ./src/main/js/app.js --outfile src/main/resources/static/js/app.js",
+    "dev": "(npm run build-dev; npm-watch | ./gradlew bootRun)",
+    "release": "npm run build-release; ./gradlew bootJar"
   },
   "watch": {
     "build-dev": "src/main/js/**"
@@ -17,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "browserify": "^16.1.1",
+    "browserify": "^16.2.3",
     "mithril": "^1.1.6",
     "npm-watch": "^0.3.0"
   }

@@ -69,4 +69,4 @@ openssl x509 -req -in localhost.csr -CA authority.pem -CAkey authority.key -CAcr
 echo "Creating keystore: localhost.p12"
 openssl "$KEYSTORE_TYPE" -export -in localhost.pem -inkey localhost.key -out "$KEYSTORE" -passout pass:"$KEYSTORE_PASSWORD"
 
-echo "Add authority.pem to you browsers truststore in order to view the website"
+echo "Add authority.pem to your browsers truststore in order to view the website"

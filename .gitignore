@@ -1,32 +1,15 @@
 src/main/resources/static/js/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
+out/
 
-### NetBeans ###
-nbproject/private/
+### Gradle ###
+.gradle/
 build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
-### Maven ###
-target/
-!.mvn/wrapper/maven-wrapper.jar
-.mvn
 
 ### NPM ###
 node_modules/
