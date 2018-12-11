@@ -45,6 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers(HttpMethod.GET, "/", "/js/*.js", "/css/*.css").permitAll()
       .anyRequest().authenticated()
       .and().addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-      .logout().logoutUrl("/auth/logout").logoutSuccessHandler(new LogoutSuccessHandlerImpl(objectMapper));
+      .logout().logoutUrl("/auth/logout").logoutSuccessHandler(new LogoutSuccessHandlerImpl(objectMapper))
+      .and().requiresChannel().anyRequest().requiresSecure();
   }
 }
