@@ -14,9 +14,6 @@ build/
 ### NPM ###
 node_modules/
 
-### Properties ###
-application.properties
-
 ### SSL ###
 localhost.*
 authority.*
