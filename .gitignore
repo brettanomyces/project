@@ -17,3 +17,4 @@ node_modules/
 ### SSL ###
 localhost.*
 authority.*
+project.p12

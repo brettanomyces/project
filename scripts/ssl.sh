@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+resource_dir="$1"
+if [[ -z "$resource_dir" ]]
+then
+	echo "Resource directory not provided"
+	exit 1
+fi
+
+cd "$resource_dir" || exit
+
 # Generate the required keys and certificates to enable SSL and have the green lock icon show when running locally.
 # In order to view the website one must add the generated certificate authorities root certificate (authority.pem) to the trust store used by the browser. 
 # Firefox maintains its own trust store whereas Safari uses the system trust store. 
 
 # To view certificates: openssl x509 -text -noout -in x.pem
 
-KEYSTORE=$(sed -n "s/^server.ssl.key-store=//p" src/main/resources/application.properties)
-KEYSTORE_TYPE=$(sed -n "s/^server.ssl.key-store-type=//p" src/main/resources/application.properties)
-KEYSTORE_PASSWORD=$(sed -n "s/^server.ssl.key-store-password=//p" src/main/resources/application.properties)
-
 # check if keystore already exists
-if openssl "$KEYSTORE_TYPE" -nokeys -info -in "$KEYSTORE" -passin pass:"$KEYSTORE_PASSWORD" >/dev/null 2>&1;
+if openssl "$PROJECT_KEYSTORE_TYPE" -nokeys -info -in "$PROJECT_KEYSTORE" -passin pass:"$PROJECT_KEYSTORE_PASSWORD" >/dev/null 2>&1;
 then
-	echo "A valid keystore already exists: ""$KEYSTORE"
 	exit 0
 fi
 
@@ -67,6 +73,6 @@ openssl x509 -req -in localhost.csr -CA authority.pem -CAkey authority.key -CAcr
 
 # Create a keystore containing certificate for localhost signed by the DEV certificate authority
 echo "Creating keystore: localhost.p12"
-openssl "$KEYSTORE_TYPE" -export -in localhost.pem -inkey localhost.key -out "$KEYSTORE" -passout pass:"$KEYSTORE_PASSWORD"
+openssl "$PROJECT_KEYSTORE_TYPE" -export -in localhost.pem -inkey localhost.key -out "$PROJECT_KEYSTORE" -passout pass:"$PROJECT_KEYSTORE_PASSWORD"
 
 echo "Add authority.pem to your browsers truststore in order to view the website"
