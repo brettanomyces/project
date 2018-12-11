@@ -20,6 +20,6 @@
   "dependencies": {
     "browserify": "^16.2.3",
     "mithril": "^1.1.6",
-    "npm-watch": "^0.3.0"
+    "npm-watch": "^0.5.0"
   }
 }
