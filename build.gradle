@@ -23,9 +23,12 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.0.3.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.0.3.RELEASE'
     compile group: 'org.springframework.data', name: 'spring-data-jdbc', version: '1.0.2.RELEASE'
+    compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.13.Final'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.3.RELEASE'
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.0.3.RELEASE'
+    testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
 }
 
 jar {
