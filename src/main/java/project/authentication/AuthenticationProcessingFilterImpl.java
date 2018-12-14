@@ -1,8 +1,8 @@
 package project.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -11,10 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@AllArgsConstructor
 public class AuthenticationProcessingFilterImpl extends UsernamePasswordAuthenticationFilter {
 
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -39,8 +38,9 @@ public class AuthenticationProcessingFilterImpl extends UsernamePasswordAuthenti
     return (String) request.getAttribute(getPasswordParameter());
   }
 
-  @Value
-  private class LoginRequest {
+  @Data
+  @NoArgsConstructor
+  private static class LoginRequest {
     private String username;
     private String password;
   }

@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.authentication.*;
 import project.domain.user.UserRepository;
 
@@ -17,18 +16,16 @@ import project.domain.user.UserRepository;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  private ObjectMapper objectMapper = new ObjectMapper();
-
   @Bean
   public UserDetailsService userDetailsService(UserRepository userRepository) {
     return new UserDetailsServiceImpl(userRepository);
   }
 
   private AbstractAuthenticationProcessingFilter authenticationFilter() throws Exception {
-    AuthenticationProcessingFilterImpl filter = new AuthenticationProcessingFilterImpl(objectMapper);
+    AuthenticationProcessingFilterImpl filter = new AuthenticationProcessingFilterImpl();
     filter.setFilterProcessesUrl("/auth/login");
-    filter.setAuthenticationSuccessHandler(new AuthenticationSuccessHandlerImpl(objectMapper));
-    filter.setAuthenticationFailureHandler(new AuthenticationFailureHandlerImpl(objectMapper));
+    filter.setAuthenticationSuccessHandler(new AuthenticationSuccessHandlerImpl());
+    filter.setAuthenticationFailureHandler(new AuthenticationFailureHandlerImpl());
     filter.setAuthenticationManager(authenticationManagerBean());
     return filter;
   }
@@ -39,13 +36,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http
       .csrf().disable()
       .exceptionHandling()
-      .authenticationEntryPoint(new AuthenticationEntryPointImpl(objectMapper))
+      .authenticationEntryPoint(new AuthenticationEntryPointImpl())
       .and().authorizeRequests()
       .antMatchers(HttpMethod.POST, "/auth/*").permitAll()
-      .antMatchers(HttpMethod.GET, "/", "/js/*.js", "/css/*.css").permitAll()
+      .antMatchers(HttpMethod.GET, "/", "/js/*.js", "/css/*.css", "/favicon.ico").permitAll()
       .anyRequest().authenticated()
-      .and().addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-      .logout().logoutUrl("/auth/logout").logoutSuccessHandler(new LogoutSuccessHandlerImpl(objectMapper))
+      .and().addFilter(authenticationFilter())
+      .logout().logoutUrl("/auth/logout").logoutSuccessHandler(new LogoutSuccessHandlerImpl())
       .and().requiresChannel().anyRequest().requiresSecure();
   }
 }
